@@ -1,0 +1,59 @@
+# Data owner's local Opal bring-up: mongo (Opal's metadata store) + one Julia-
+# baked Rock node + Opal. Mirrors dsBaseClient's docker-compose_opal.yml but
+# points the rock service at the image built from ./Dockerfile.
+#
+#   docker compose -f docker/docker-compose.yml up -d
+#   # then, once healthy, run setup_opal.R (profile + options + tables)
+#
+# ARM64 NOTE: Rock images are amd64. On an Apple-silicon host this runs under
+# emulation and Julia may be unusably slow. Build and run on an x86_64 host.
+services:
+  mongo:
+    image: mongo:6.0
+    volumes:
+      - mongo_data:/data/db
+
+  rock:
+    # Build the Julia-baked profile image from the Dockerfile in this directory.
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dsnolimits/rock-nolimits:0.0.3
+    environment:
+      # The Opal DataSHIELD profile name equals this cluster name, NOT ROCK_ID.
+      - ROCK_CLUSTER=nolimits
+      - ROCK_ID=nolimits-1
+      - ROCK_ADMINISTRATOR_PASSWORD=password
+      - ROCK_MANAGER_PASSWORD=password
+      - ROCK_USER_PASSWORD=password
+    volumes:
+      # The DP ledger MUST live on a persistent volume. The ledger enforces the
+      # differential-privacy budget across sessions and re-logins; a container
+      # rebuild on an ephemeral path resets the spent budget to zero, which is
+      # exactly the failure mode the design guards against. This path is what
+      # dsNoLimits.dp.ledgerDir is set to in setup_opal.R.
+      - dp_ledger:/var/lib/rock/dp-ledger
+    ports:
+      - "8085:8085"
+
+  opal:
+    image: obiba/opal:5.1
+    environment:
+      - OPAL_ADMINISTRATOR_PASSWORD=password
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      # Opal discovers the Rock node here (host:port on the rock service).
+      - ROCK_HOSTS=rock:8085
+    depends_on:
+      - mongo
+      - rock
+    volumes:
+      - opal_srv:/srv
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongo_data:
+  opal_srv:
+  # Persistent DP ledger. Do not prune this volume: it holds the spent budget.
+  dp_ledger:

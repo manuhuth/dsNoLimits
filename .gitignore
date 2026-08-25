@@ -1,0 +1,10 @@
+*.tar.gz
+*.Rcheck/
+.Rproj.user/
+.Rhistory
+.RData
+.DS_Store
+.Rapp.history
+*.Rproj
+PLAN.md
+PROGRESS.md

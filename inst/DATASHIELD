@@ -1,0 +1,27 @@
+AggregateMethods:
+    nolimitsStatusDS,
+    nolimitsModelsDS,
+    nolimitsPrepInfoDS,
+    nolimitsObjGradDS,
+    nolimitsObjGradDpDS,
+    nolimitsNaturalDS,
+    nolimitsEmQDS,
+    nolimitsEmQDpDS,
+    nolimitsSaemStatsDS,
+    nolimitsSaemStatsDpDS,
+    nolimitsSaemUpdatesDS
+AssignMethods:
+    nolimitsPrepDS,
+    nolimitsPrepStringDS,
+    nolimitsEmEStepDS,
+    nolimitsSaemMstepDS
+Options:
+    default.dsNoLimits.modelDir="",
+    default.dsNoLimits.maxRounds=500,
+    default.dsNoLimits.dp.ledgerDir="",
+    default.dsNoLimits.dp.clip=20,
+    default.dsNoLimits.dp.clipMode="per-group",
+    default.dsNoLimits.dp.noiseMultiplier=1,
+    default.dsNoLimits.dp.epsilonBudget=10,
+    default.dsNoLimits.dp.delta=1e-5,
+    default.dsNoLimits.dp.maxT=200

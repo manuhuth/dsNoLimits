@@ -1,0 +1,35 @@
+Package: dsNoLimits
+Title: 'DataSHIELD' Server-Side Nonlinear Mixed-Effects Analysis
+Version: 0.0.5.9000
+Date: 2026-08-25
+Authors@R:
+    person("Manuel", "Huth", , "manuel.huth@uni-bonn.de", role = c("aut", "cre"))
+Description: 'DataSHIELD' 'server-side' functions that evaluate the marginal
+    log-likelihood and its gradient for nonlinear mixed-effects models of
+    longitudinal data, so that a 'client-side' package can drive a federated
+    optimisation across several servers and obtain estimates identical to a
+    pooled analysis without any individual-level data leaving the server.
+License: LGPL (>= 3)
+Encoding: UTF-8
+Language: en-GB
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.1.0)
+Imports:
+    dsBase,
+    digest,
+    filelock,
+    jsonlite,
+    utils
+Suggests:
+    callr,
+    JuliaConnectoR,
+    NoLimitsR,
+    testthat (>= 3.0.0),
+    withr,
+    spelling
+Config/testthat/edition: 3
+Additional_repositories: https://cran.obiba.org/
+Remotes:
+    manuhuth/NoLimitsR
