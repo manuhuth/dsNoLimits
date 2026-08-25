@@ -111,31 +111,29 @@
 #' @noRd
 .dp_clip_total <- function(clips) sqrt(sum(clips^2))
 
-#' Uniform deviates straight from the operating system's entropy pool.
+#' Uniform deviates from a cryptographic entropy source (OpenSSL's CSPRNG).
 #'
 #' Never the session's RNG stream: `datashield.seed` makes that stream
 #' reproducible, and reproducible privacy noise is no privacy at all - anyone
-#' holding the seed subtracts it and recovers the exact clipped sum. Reading
-#' `/dev/urandom` also leaves `.Random.seed` untouched by construction, so a DP
-#' round cannot perturb an analyst's other seeded work either.
+#' holding the seed subtracts it and recovers the exact clipped sum.
+#' `openssl::rand_bytes` draws from the operating system's CSPRNG on every
+#' platform and leaves `.Random.seed` untouched, so a DP round cannot perturb an
+#' analyst's other seeded work either.
 #' @keywords internal
 #' @noRd
 .dp_os_uniform <- function(m) {
-  if (!file.exists("/dev/urandom")) {
-    stop("FAILED: this server has no operating-system entropy source ",
-         "(/dev/urandom), so differentially private noise cannot be drawn",
-         call. = FALSE)
+  if (!requireNamespace("openssl", quietly = TRUE)) {
+    stop("FAILED: the 'openssl' package is required to draw differentially ",
+         "private noise from a cryptographic entropy source", call. = FALSE)
   }
-  con <- file("/dev/urandom", "rb", raw = TRUE)
-  on.exit(close(con), add = TRUE)
-  w <- readBin(con, "integer", n = 2L * m, size = 2L, signed = FALSE)
-  if (length(w) != 2L * m) {
-    stop("FAILED: the operating-system entropy source returned too few bytes",
-         call. = FALSE)
-  }
-  # Two 16-bit words per deviate; the +0.5 keeps the value strictly inside
-  # (0, 1) so the log below is finite.
-  ((w[c(TRUE, FALSE)] * 65536 + w[c(FALSE, TRUE)]) + 0.5) / 4294967296
+  # Four cryptographically secure bytes per deviate.
+  w <- as.numeric(openssl::rand_bytes(4L * m))
+  b <- matrix(w, nrow = 4L)
+  # One 32-bit value per deviate; the +0.5 keeps it strictly inside (0, 1) so
+  # the log in Box-Muller is finite. Doubles throughout to avoid integer
+  # overflow at 255 * 2^24.
+  ints <- b[1L, ] * 16777216 + b[2L, ] * 65536 + b[3L, ] * 256 + b[4L, ]
+  (ints + 0.5) / 4294967296
 }
 
 #' Gaussian noise from OS entropy, by Box-Muller.

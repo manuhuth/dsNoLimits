@@ -304,8 +304,9 @@ Per-group clipping at `C_g` per group is exactly as private as joint clipping at
 `C_total = sqrt(sum_g C_g^2)`, which is why the accountant needs no per-group
 case: epsilon depends on `sigma` and the release count alone.
 
-The noise is drawn from the operating system's entropy pool (`/dev/urandom`),
-never from R's session RNG: `datashield.seed` makes that stream reproducible, and
+The noise is drawn from a cryptographic entropy source (the operating system's
+CSPRNG, via `openssl::rand_bytes`), never from R's session RNG: `datashield.seed`
+makes that stream reproducible, and
 reproducible privacy noise is no privacy at all - anyone holding the seed
 subtracts it and recovers the exact clipped sum. The draw leaves `.Random.seed`
 untouched, so it neither perturbs nor consumes an analyst's seeded work.
