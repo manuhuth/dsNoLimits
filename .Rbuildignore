@@ -4,7 +4,6 @@
 ^\.github$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^LICENSE\.md$
 ^DISCLOSURE\.md$
 ^DEPLOYMENT\.md$
 ^\.lintr$

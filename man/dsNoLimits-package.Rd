@@ -8,6 +8,15 @@
 \description{
 'DataSHIELD' 'server-side' functions that evaluate the marginal log-likelihood and its gradient for nonlinear mixed-effects models of longitudinal data, so that a 'client-side' package can drive a federated optimisation across several servers and obtain estimates identical to a pooled analysis without any individual-level data leaving the server.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/manuhuth/dsNoLimits}
+  \item \url{https://github.com/manuhuth/dsNoLimitsClient}
+  \item Report bugs at \url{https://github.com/manuhuth/dsNoLimits/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Manuel Huth \email{manuel.huth@uni-bonn.de}
 
