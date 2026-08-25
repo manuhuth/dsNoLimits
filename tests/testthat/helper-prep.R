@@ -8,6 +8,7 @@
 .nlds_prep_cache <- new.env(parent = emptyenv())
 
 nlds_get_prep <- function() {
+  nlds_skip_no_julia()
   if (!is.null(.nlds_prep_cache$prep)) return(.nlds_prep_cache$prep)
   dir <- file.path(tempdir(), "nlds-registry")
   dir.create(dir, showWarnings = FALSE)
@@ -22,6 +23,7 @@ nlds_get_prep <- function() {
 # The no-random-effects, priored fixture, for the mle/map arms. p = 3 over 6
 # subjects, so nfilter.glm >= 0.5 is enough; nlds_fit_options() uses 1.
 nlds_get_prep_nore <- function() {
+  nlds_skip_no_julia()
   if (!is.null(.nlds_prep_cache$nore)) return(.nlds_prep_cache$nore)
   dir <- file.path(tempdir(), "nlds-registry")
   dir.create(dir, showWarnings = FALSE)

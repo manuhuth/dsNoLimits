@@ -77,12 +77,28 @@ ds_test_options <- function(control = "permissive", ...) {
 # The fixture needs nfilter.glm raised: 4 parameters over 6 subjects.
 nlds_fit_options <- function(...) ds_test_options(nfilter.glm = 1, ...)
 
+# TRUE only if NoLimits actually boots: Julia present AND NoLimits.jl installed
+# and loadable. Cached so booting is attempted once. On CI, where no Julia /
+# NoLimits environment is provisioned, this is FALSE and the Julia tiers skip
+# instead of erroring.
+.nlds_ready <- local({
+  cached <- NULL
+  function() {
+    if (is.null(cached)) {
+      cached <<- isTRUE(tryCatch(
+        requireNamespace("NoLimitsR", quietly = TRUE) &&
+          requireNamespace("JuliaConnectoR", quietly = TRUE) &&
+          isTRUE(JuliaConnectoR::juliaSetupOk()) &&
+          !is.null(NoLimitsR::nolimits()),
+        error = function(e) FALSE))
+    }
+    cached
+  }
+})
+
 nlds_skip_no_julia <- function() {
   skip_on_cran()
-  skip_if_not(requireNamespace("NoLimitsR", quietly = TRUE) &&
-                requireNamespace("JuliaConnectoR", quietly = TRUE) &&
-                isTRUE(JuliaConnectoR::juliaSetupOk()),
-              "Julia / NoLimitsR not available")
+  skip_if_not(.nlds_ready(), "Julia / NoLimits not available")
 }
 
 # A registry directory holding the fixture model under a registered name.
