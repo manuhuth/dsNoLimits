@@ -9,7 +9,10 @@ Description: 'DataSHIELD' 'server-side' functions that evaluate the marginal
     longitudinal data, so that a 'client-side' package can drive a federated
     optimisation across several servers and obtain estimates identical to a
     pooled analysis without any individual-level data leaving the server.
-License: LGPL (>= 3)
+License: MIT + file LICENSE
+URL: https://github.com/manuhuth/dsNoLimits,
+    https://github.com/manuhuth/dsNoLimitsClient
+BugReports: https://github.com/manuhuth/dsNoLimits/issues
 Encoding: UTF-8
 Language: en-GB
 Roxygen: list(markdown = TRUE)

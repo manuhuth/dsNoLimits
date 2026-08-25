@@ -8,7 +8,8 @@ identical to a pooled analysis without any individual-level data leaving the
 node.
 
 This is the package a data custodian installs and permits. Analysts do not use
-it directly; they use `dsNoLimitsClient`.
+it directly; they use the client package
+[`dsNoLimitsClient`](https://github.com/manuhuth/dsNoLimitsClient).
 
 ## What it does
 
@@ -90,4 +91,4 @@ Opal/Rock server will follow. See [NEWS.md](NEWS.md).
 
 ## License
 
-LGPL (>= 3).
+MIT. See [LICENSE.md](LICENSE.md).
